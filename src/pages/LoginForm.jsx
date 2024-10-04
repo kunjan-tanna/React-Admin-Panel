@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -7,32 +7,91 @@ import {
   Box,
   Link,
 } from "@mui/material";
-import routes from "../Routes/Routes";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { displayLog } from "../utils/functions";
+import { fetchAllUsers } from "../features/users/userAction";
+import routes from "../Routes/Routes"; // Make sure to import routes
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isAuthenticated, loading, error } = useSelector(
+    (state) => state.auth
+  );
+  const { users } = useSelector((state) => state.users);
+  console.log("LOGIN", users);
+  const [errors, setErrors] = useState({});
+
+  // Fetch users when the component mounts
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, [dispatch]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    setErrors({});
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    setErrors({});
   };
 
   const handleRememberMeChange = (event) => {
     setRememberMe(event.target.checked);
   };
 
-  const handleSubmit = (event) => {
+  // Validation schema using Yup
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*()_+{}\[\]:;<>?,.\/!]).*$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      )
+      .required("Password is required"),
+  });
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+
+    try {
+      // Validate email and password
+      await validationSchema.validate(
+        { email, password },
+        { abortEarly: false }
+      );
+      setErrors({});
+
+      const existingUser = users.find(
+        (user) => user.email === email && user.password === password
+      );
+
+      if (existingUser) {
+        displayLog(1, "User already exists. Redirecting to dashboard...");
+        navigate("/dashboard");
+      } else {
+        displayLog(2, "User not found. Please create a new account.");
+        navigate(routes.SIGNUP);
+      }
+    } catch (err) {
+      const validationErrors = {};
+      err.inner.forEach((error) => {
+        validationErrors[error.path] = error.message;
+      });
+      setErrors(validationErrors);
+    }
   };
 
   return (
@@ -61,6 +120,9 @@ const LoginForm = () => {
           onChange={handleEmailChange}
           fullWidth
           margin="normal"
+          name="email"
+          error={!!errors.email}
+          helperText={errors.email}
         />
         <Link
           href="/forgot-password"
@@ -75,6 +137,9 @@ const LoginForm = () => {
           onChange={handlePasswordChange}
           fullWidth
           margin="normal"
+          name="password"
+          error={!!errors.password}
+          helperText={errors.password}
         />
         <Box display="flex" alignItems="center">
           <Checkbox
@@ -84,14 +149,29 @@ const LoginForm = () => {
           />
           <Typography variant="body2">Remember Password</Typography>
         </Box>
-        <Button variant="contained" color="primary" type="submit" fullWidth>
+
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          disabled={Object.keys(errors).length > 0}
+        >
           Sign In
         </Button>
+        {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+        {Object.keys(errors).length > 0 && (
+          <Typography variant="body2" color="error" mt={2}>
+            Please fill in all required fields.
+          </Typography>
+        )}
         <Typography variant="body2" color="textSecondary" mt={2}>
           Don't have an account?{" "}
           <NavLink to={routes.SIGNUP}>Create Account</NavLink>
         </Typography>
       </Box>
+      {isAuthenticated && displayLog(1, "Login Success")}
     </Box>
   );
 };

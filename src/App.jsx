@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-
+import "alertifyjs/build/css/alertify.css";
 //Components
 import LoginForm from "./pages/LoginForm.jsx";
 import Dashboard from "./pages/Dashboard.jsx";

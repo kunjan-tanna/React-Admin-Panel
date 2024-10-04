@@ -1,40 +1,68 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Checkbox,
-  Typography,
-  Box,
-  Link,
-} from "@mui/material";
+import { TextField, Button, Typography, Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import routes from "../Routes/Routes";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../features/auth/authActions";
+import { displayLog } from "../utils/functions";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: "",
+  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const { isAuthenticated, loading, error } = useSelector(
+    (state) => state.auth
+  );
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    setErrors({}); // Clear error on change
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*()_+{}\[\]:;<>?,.\/!]).*$/
+      )
+      .required("Password is required"),
+  });
 
-  const handleRememberMeChange = (event) => {
-    setRememberMe(event.target.checked);
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      console.log(formData);
+      dispatch(registerUser(formData));
+      setErrors({});
+    } catch (err) {
+      const validationErrors = {};
+      err.inner.forEach((error) => {
+        validationErrors[error.path] = error.message;
+      });
+      setErrors(validationErrors);
+    }
   };
-
+  if (isAuthenticated) {
+    navigate("/signin");
+  }
   return (
     <Box
       component={"div"}
@@ -55,31 +83,38 @@ const Register = () => {
           Create an Account
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
-          Create a account to continue
+          Create an account to continue
         </Typography>
         <TextField
           label="Email address"
           type="email"
-          value={email}
-          onChange={handleEmailChange}
+          value={formData.email}
+          onChange={handleChange}
           fullWidth
+          name="email"
           margin="normal"
+          error={!!errors.email}
+          helperText={errors.email}
         />
         <TextField
           label="Username"
           type="text"
-          value={email}
-          onChange={handleEmailChange}
+          value={formData.username}
+          onChange={handleChange}
           fullWidth
+          name="username"
           margin="normal"
         />
         <TextField
           label="Password"
           type="password"
-          value={password}
-          onChange={handlePasswordChange}
+          value={formData.password}
+          onChange={handleChange}
           fullWidth
+          name="password"
           margin="normal"
+          error={!!errors.password}
+          helperText={errors.password}
         />
 
         <Button
@@ -88,13 +123,23 @@ const Register = () => {
           color="primary"
           type="submit"
           size="large"
+          disabled={Object.keys(errors).length > 0}
         >
           Sign Up
         </Button>
+
+        {Object.keys(errors).length > 0 && (
+          <Typography variant="body2" color="error" mt={2}>
+            Please fill in all required fields.
+          </Typography>
+        )}
         <Typography variant="body2" color="textSecondary" mt={2}>
           Already have an account? <NavLink to={routes.SIGNIN}>Login</NavLink>
         </Typography>
       </Box>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}  
+      {isAuthenticated && displayLog(1, "Register Success")}
     </Box>
   );
 };
