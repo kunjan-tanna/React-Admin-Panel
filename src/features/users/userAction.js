@@ -1,5 +1,3 @@
-// src/features/users/userActions.js
-import axios from "axios";
 import {
   fetchUsersPending,
   fetchUsersSuccess,
@@ -10,16 +8,16 @@ import {
 import { apiCall } from "../../utils/common";
 
 export const fetchAllUsers = () => async (dispatch) => {
-  dispatch(fetchUsersPending()); // Dispatch pending action
+  dispatch(fetchUsersPending());
   try {
     const response = await apiCall(
       "GET",
       "https://66fd70366993693089553341.mockapi.io/users"
     );
     console.log("RES", response);
-    dispatch(fetchUsersSuccess(response)); // Dispatch success action with data
+    dispatch(fetchUsersSuccess(response));
   } catch (error) {
-    dispatch(fetchUsersFailed(error.response || "Failed to fetch users")); // Dispatch error action
+    dispatch(fetchUsersFailed(error.response || "Failed to fetch users"));
   }
 };
 

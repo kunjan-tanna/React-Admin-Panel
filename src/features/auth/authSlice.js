@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: localStorage.getItem("isAuthenticated") === "true",
   loading: false,
   error: null,
 };
@@ -16,12 +16,14 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
+      localStorage.setItem("isAuthenticated", true);
     },
     loginFailure: (state, action) => {
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = action.payload;
+      localStorage.setItem("isAuthenticated", false);
     },
     registerSuccess: (state, action) => {
       console.log("A", action);
@@ -29,18 +31,22 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
+      localStorage.setItem("isAuthenticated", true);
     },
     registerFailure: (state, action) => {
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = action.payload;
+      localStorage.setItem("isAuthenticated", false);
     },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
+      localStorage.setItem("isAuthenticated", false);
+      localStorage.removeItem("estimationList");
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

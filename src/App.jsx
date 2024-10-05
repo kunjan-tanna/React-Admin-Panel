@@ -8,11 +8,16 @@ import Projects from "./pages/Projects.jsx";
 import Estimations from "./pages/Estimations.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
+import Sidebar from "./components/Sidebar.jsx";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  console.log("isAuthenticated", isAuthenticated);
   return (
     <>
       <Router>
+        {isAuthenticated && <Sidebar />}
         <Routes>
           {/* <Route path="/" element={<LoginForm />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />

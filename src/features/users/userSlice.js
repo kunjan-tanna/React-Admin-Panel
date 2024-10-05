@@ -1,15 +1,12 @@
-// src/features/users/userSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { displayLog } from "../../utils/functions";
 
-// Initial state
 const initialState = {
   users: [],
   isLoading: false,
   error: null,
 };
 
-// Create the slice
 const userSlice = createSlice({
   name: "users",
   initialState,
@@ -38,7 +35,6 @@ const userSlice = createSlice({
   },
 });
 
-// Export actions
 export const {
   fetchUsersPending,
   fetchUsersSuccess,
@@ -47,5 +43,4 @@ export const {
   userUpdateFail,
 } = userSlice.actions;
 
-// Export reducer
 export default userSlice.reducer;

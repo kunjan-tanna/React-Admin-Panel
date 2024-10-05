@@ -157,7 +157,8 @@ const ForgotPassword = () => {
         )}
 
         <Typography variant="body2" color="textSecondary" mt={2}>
-          Remembered your password? <NavLink to={routes.LOGIN}>Sign In</NavLink>
+          Remembered your password?{" "}
+          <NavLink to={routes.SIGNIN}>Sign In</NavLink>
         </Typography>
       </Box>
     </Box>

@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { displayLog } from "../utils/functions";
 import { fetchAllUsers } from "../features/users/userAction";
 import routes from "../Routes/Routes"; // Make sure to import routes
+import { loginSuccess } from "../features/auth/authSlice";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -80,7 +81,8 @@ const LoginForm = () => {
 
       if (existingUser) {
         displayLog(1, "Login Success");
-        navigate("/dashboard");
+        dispatch(loginSuccess(existingUser));
+        navigate(routes.DASHBOARD);
       } else {
         displayLog(2, "User not found. Please create a new account.");
         navigate(routes.SIGNUP);
