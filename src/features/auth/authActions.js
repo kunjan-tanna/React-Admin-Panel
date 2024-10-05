@@ -16,7 +16,6 @@ export const registerUser = (userData) => async (dispatch) => {
       "https://66fd70366993693089553341.mockapi.io/users",
       userData
     );
-    console.log("RES", response);
     dispatch(registerSuccess(response));
   } catch (error) {
     dispatch(registerFailure(error.response.message));

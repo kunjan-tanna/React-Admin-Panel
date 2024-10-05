@@ -68,6 +68,7 @@ const ForgotPassword = () => {
         { abortEarly: false }
       );
       setErrors({});
+
       const existingUsers = users.filter((user) => user.email === email);
       console.log("existingUsers", existingUsers);
       if (existingUsers.length > 0) {

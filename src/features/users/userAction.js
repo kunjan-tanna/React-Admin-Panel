@@ -25,18 +25,13 @@ export const fetchAllUsers = () => async (dispatch) => {
 
 export const updateUserPassword =
   (updatedUser) => async (dispatch, getState) => {
-    const { users } = getState().users;
-
     try {
-      console.log("USER", updatedUser);
       const response = await apiCall(
         "PUT",
-        "https://66fd70366993693089553341.mockapi.io/users/:id",
+        `https://66fd70366993693089553341.mockapi.io/users/${updatedUser.id}`,
         updatedUser
       );
-      console.log(response);
-      return;
-      dispatch(updateUserPasswordSuccess(updatedUsersList));
+      dispatch(updateUserPasswordSuccess(response));
     } catch (error) {
       dispatch(userUpdateFail(error.message));
     }

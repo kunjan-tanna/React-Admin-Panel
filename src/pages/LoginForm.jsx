@@ -79,7 +79,7 @@ const LoginForm = () => {
       );
 
       if (existingUser) {
-        displayLog(1, "User already exists. Redirecting to dashboard...");
+        displayLog(1, "Login Success");
         navigate("/dashboard");
       } else {
         displayLog(2, "User not found. Please create a new account.");
