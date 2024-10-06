@@ -12,8 +12,14 @@ import {
   InputAdornment,
   InputLabel,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import routes from "../../Routes/Routes";
 
 const AddEstimation = () => {
   const [sections, setSections] = useState([{ id: 1, items: [{ id: 1 }] }]);
@@ -23,6 +29,9 @@ const AddEstimation = () => {
   const [totalMargin, setTotalMargin] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [formData, setFormData] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
+  const navigate = useNavigate();
 
   const handleAddSection = () => {
     const newSectionId = sectionId + 1;
@@ -80,7 +89,17 @@ const AddEstimation = () => {
 
   const handleSubmit = () => {
     console.log("FINAL", formData);
+    if (Object.values(formData).length > 0) {
+      setDialogData(formData);
+      setOpenDialog(true);
+    }
   };
+
+  const handleCloseDialog = () => {
+    navigate(routes.ESTIMATIONS);
+    setOpenDialog(false);
+  };
+
   const handleFormChange = (sectionId, itemId, field, value) => {
     setFormData((prev) => {
       const newFormData = { ...prev };
@@ -348,13 +367,33 @@ const AddEstimation = () => {
       </Paper>
 
       <Box display="flex" justifyContent="space-between" mt={4}>
-        <Button variant="outlined" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate(routes.ESTIMATIONS)}
+        >
           Cancel
         </Button>
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Submit
         </Button>
       </Box>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
+        <DialogTitle>Submitted Form Data</DialogTitle>
+        <DialogContent>
+          <p>
+            Note: i tried to make it format for data storing in mock API but
+            doesn't match so as frontend level part is done{" "}
+          </p>
+          <pre>{JSON.stringify(dialogData, null, 2)}</pre>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
