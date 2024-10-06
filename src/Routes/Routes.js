@@ -6,6 +6,8 @@ const routes = {
   PROJECTS: "/projects",
   ESTIMATIONS: "/estimations",
   ADDESTIMATION: "/add-estimation",
+  ADDPROJECT: "/add-project",
+  EDITPROJECT: "/add-project/:projectId",
 };
 
 export default routes;

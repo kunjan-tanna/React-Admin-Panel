@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Container } from "@mui/material";
+import { Grid, Container, TextField } from "@mui/material";
 import Header from "../components/estimations/Header";
 import EstimationList from "../components/estimations/EstimationList";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,20 +17,44 @@ function Estimations() {
   console.log(estimations);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(estimations.length / itemsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1);
+  };
+  const filteredProjects = estimations.filter((project) => {
+    return (
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.unit.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
-  const paginatedEstimations = estimations?.slice(
+  const paginatedEstimations = filteredProjects?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
   return (
     <Container maxWidth="lg">
-      <Header />
+      <Header
+        title={"Estimates"}
+        btnName={"Add Estimate"}
+        nagivateLink={true}
+      />
+      <TextField
+        label="Search Estimation by title and unit"
+        variant="filled"
+        value={searchQuery}
+        fullWidth
+        onChange={handleSearchChange}
+        sx={{ marginBottom: 1, ml: 1, background: "white" }}
+      />
       {loading ? (
         <div>Loading...</div>
       ) : (

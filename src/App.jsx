@@ -12,6 +12,7 @@ import Sidebar from "./components/Sidebar.jsx";
 import { useSelector } from "react-redux";
 import AddEstimation from "./components/estimations/AddEstimation.jsx";
 import routes from "./Routes/Routes.js";
+import AddProject from "./components/projects/AddProject.jsx";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -26,7 +27,8 @@ function App() {
           <Route path={routes.PROJECTS} element={<Projects />} />
           <Route path={routes.ESTIMATIONS} element={<Estimations />} />
           <Route path={routes.ADDESTIMATION} element={<AddEstimation />} />
-
+          <Route path={routes.ADDPROJECT} element={<AddProject />} />
+          <Route path={routes.EDITPROJECT} element={<AddProject />} />
           <Route path={routes.SIGNUP} element={<Register />} />
           <Route path={routes.SIGNIN} element={<LoginForm />} />
           <Route path={routes.FORGOTPASSWORD} element={<ForgotPassword />} />

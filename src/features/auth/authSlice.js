@@ -47,6 +47,7 @@ export const authSlice = createSlice({
       state.error = null;
       localStorage.setItem("isAuthenticated", false);
       localStorage.removeItem("estimationList");
+      localStorage.removeItem("projectsList");
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

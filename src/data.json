@@ -1,0 +1,40 @@
+{
+  "manager": [
+    {
+      "id": 1,
+      "name": "John Doe"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith"
+    }
+  ],
+  "staff": [
+    {
+      "id": 1,
+      "name": "Alice Johnson"
+    },
+    {
+      "id": 2,
+      "name": "Bob Brown"
+    },
+    {
+      "id": 3,
+      "name": "Charlie Davis"
+    }
+  ],
+  "status": [
+    {
+      "id": 1,
+      "name": "Active"
+    },
+    {
+      "id": 2,
+      "name": "Inactive"
+    },
+    {
+      "id": 3,
+      "name": "Pending"
+    }
+  ]
+}
