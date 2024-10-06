@@ -5,6 +5,7 @@ const routes = {
   FORGOTPASSWORD: "/forgot-password",
   PROJECTS: "/projects",
   ESTIMATIONS: "/estimations",
+  ADDESTIMATION: "/add-estimation",
 };
 
 export default routes;

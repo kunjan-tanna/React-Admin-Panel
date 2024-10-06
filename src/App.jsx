@@ -10,6 +10,8 @@ import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import { useSelector } from "react-redux";
+import AddEstimation from "./components/estimations/AddEstimation.jsx";
+import routes from "./Routes/Routes.js";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -20,12 +22,14 @@ function App() {
         {isAuthenticated && <Sidebar />}
         <Routes>
           {/* <Route path="/" element={<LoginForm />} /> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/estimations" element={<Estimations />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/signin" element={<LoginForm />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path={routes.DASHBOARD} element={<Dashboard />} />
+          <Route path={routes.PROJECTS} element={<Projects />} />
+          <Route path={routes.ESTIMATIONS} element={<Estimations />} />
+          <Route path={routes.ADDESTIMATION} element={<AddEstimation />} />
+
+          <Route path={routes.SIGNUP} element={<Register />} />
+          <Route path={routes.SIGNIN} element={<LoginForm />} />
+          <Route path={routes.FORGOTPASSWORD} element={<ForgotPassword />} />
         </Routes>
       </Router>
     </>

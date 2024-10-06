@@ -72,6 +72,7 @@ function EstimationList({
                     size="small"
                     onClick={() => onEditClick(estimation.id)}
                     sx={{ mr: 1 }}
+                    disabled
                   >
                     Edit
                   </Button>

@@ -1,7 +1,10 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import routes from "../../Routes/Routes";
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <AppBar
       position="static"
@@ -11,7 +14,11 @@ function Header() {
         <Typography variant="h6" component="div">
           Estimates
         </Typography>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate(routes.ADDESTIMATION)}
+        >
           Add Estimate
         </Button>
       </Toolbar>
