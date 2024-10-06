@@ -102,6 +102,7 @@ const ForgotPassword = () => {
         height: "60vh",
         width: "40vw",
         borderRadius: 8,
+        margin: "0 auto",
         padding: 4,
         backgroundColor: "white",
       }}

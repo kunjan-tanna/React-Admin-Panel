@@ -76,6 +76,7 @@ const Register = () => {
         borderRadius: 8,
         padding: 4,
         backgroundColor: "white",
+        margin: "0 auto",
       }}
     >
       <Box component="form" onSubmit={handleSubmit}>

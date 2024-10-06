@@ -12,7 +12,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { displayLog } from "../utils/functions";
 import { fetchAllUsers } from "../features/users/userAction";
-import routes from "../Routes/Routes"; // Make sure to import routes
+import routes from "../Routes/Routes";
 import { loginSuccess } from "../features/auth/authSlice";
 
 const LoginForm = () => {
@@ -107,6 +107,7 @@ const LoginForm = () => {
         height: "60vh",
         width: "40vw",
         borderRadius: 8,
+        margin: "0 auto",
         padding: 4,
         backgroundColor: "white",
       }}
@@ -173,7 +174,6 @@ const LoginForm = () => {
           <NavLink to={routes.SIGNUP}>Create Account</NavLink>
         </Typography>
       </Box>
-      {isAuthenticated && displayLog(1, "Login Success")}
     </Box>
   );
 };
